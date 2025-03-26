@@ -1,0 +1,8 @@
+# MySQL not supported yet #
+use-MySQL: false
+MySQL:
+  host: ""
+  user: ""
+  password: ""
+  database: ""
+  port: ""
