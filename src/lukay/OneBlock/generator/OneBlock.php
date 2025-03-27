@@ -15,8 +15,8 @@ class OneBlock extends Generator{
     }
 
     public function generateChunk(ChunkManager $world, int $chunkX, int $chunkZ): void{
-        if($chunkX === 16 && $chunkZ === 16){
-            $world->getChunk($chunkX, $chunkZ)->setBlockStateId(0, 64, 0, VanillaBlocks::GRASS()->getStateId());
+        if($chunkX === 0 && $chunkZ === 0){
+            $world->setBlockAt(0, 64, 0, VanillaBlocks::GRASS());
         }
     }
 

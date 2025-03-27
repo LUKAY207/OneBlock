@@ -28,7 +28,7 @@ class CreateSubcommand extends Subcommand{
             return;
         }
 
-        if(count($args[0]) === 0){
+        if(count($args) === 0){
             $sender->sendMessage("§cYou need to give a name for the OneBlock: §7/oneblock create name");
             return;
         }
@@ -45,6 +45,6 @@ class CreateSubcommand extends Subcommand{
             Server::getInstance()->getWorldManager()->loadWorld($oneBlock->getWorld()->getFolderName());
         }
 
-        $sender->teleport(new Position(0,64, 0, $oneBlock->getWorld()));
+        $sender->teleport(new Position(0,65, 0, $oneBlock->getWorld()));
     }
 }

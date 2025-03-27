@@ -32,11 +32,15 @@ class OneBlock{
         $this->name = $name;
 
         $server = Server::getInstance();
-        $server->getWorldManager()->generateWorld($name,
-            WorldCreationOptions::create()
-                ->setSpawnPosition(new Vector3(0, 64, 0))
-                ->setSeed(mt_rand())
-                ->setGeneratorClass(OneBlockGenerator::class));
+
+        if($server->getWorldManager()->getWorldByName($name) === null) {
+            $server->getWorldManager()->generateWorld($name,
+                WorldCreationOptions::create()
+                    ->setSpawnPosition(new Vector3(0, 65, 0))
+                    ->setSeed(mt_rand())
+                    ->setGeneratorClass(OneBlockGenerator::class));
+        }
+
         $this->world = $server->getWorldManager()->getWorldByName($name);
     }
 
