@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace lukay\OneBlock;
 
 use JsonException;
+use pocketmine\block\BlockIdentifier;
+use pocketmine\block\BlockTypeIds;
+use pocketmine\block\VanillaBlocks;
 use pocketmine\player\Player;
 use pocketmine\utils\Config;
 use pocketmine\utils\SingletonTrait;
@@ -14,13 +17,7 @@ class OneBlockFactory{
 
     private array $loadedOneBlock = [];
     public const int STAGE_ONE = 1;
-    public const array STAGE_ONE_BLOCKS =
-        [
-        ];
     public const int STAGE_TWO = 2;
-    public const array STAGE_TWO_BLOCKS =
-        [
-        ];
 
     public function getData() : Config{
         return new Config(Loader::getInstance()->getDataFolder() . "data.json", Config::JSON);

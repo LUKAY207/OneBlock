@@ -6,7 +6,12 @@ namespace lukay\OneBlock;
 
 use lukay\OneBlock\generator\OneBlock as OneBlockGenerator;
 use pocketmine\block\Block;
+use pocketmine\block\BlockIdentifier;
+use pocketmine\block\BlockTypeIds;
+use pocketmine\block\BlockTypeInfo;
 use pocketmine\block\VanillaBlocks;
+use pocketmine\data\bedrock\item\BlockItemIdMap;
+use pocketmine\item\StringToItemParser;
 use pocketmine\math\Vector3;
 use pocketmine\player\Player;
 use pocketmine\Server;
@@ -18,7 +23,7 @@ class OneBlock{
     private ?Player $owner;
     private string $name;
     private World $world;
-    private $brokenSpawnerBlockCounter = 0;
+    private int $brokenSpawnerBlockCounter = 0;
     private int $stage = OneBlockFactory::STAGE_ONE;
 
     public function __construct(Player $owner, string $name){
@@ -83,10 +88,12 @@ class OneBlock{
     }
 
     public function getStageBlocks() : ?array{
+        $stageOneBlocks = [VanillaBlocks::GRASS(), VanillaBlocks::STONE(), VanillaBlocks::OAK_LOG()];
+        $stageTwoBlocks = [];
         if($this->stage === OneBlockFactory::STAGE_ONE){
-            return OneBlockFactory::STAGE_ONE_BLOCKS;
+            return $stageOneBlocks;
         }elseif($this->stage === OneBlockFactory::STAGE_TWO){
-            return array_merge(OneBlockFactory::STAGE_ONE_BLOCKS, OneBlockFactory::STAGE_TWO_BLOCKS);
+            return array_merge($stageOneBlocks, $stageTwoBlocks);
         }
         return null;
     }

@@ -44,6 +44,7 @@ class CreateSubcommand extends Subcommand{
         if(!$oneBlock->getWorld()->isLoaded()){
             Server::getInstance()->getWorldManager()->loadWorld($oneBlock->getWorld()->getFolderName());
         }
+
         $sender->teleport(new Position(0,64, 0, $oneBlock->getWorld()));
     }
 }
