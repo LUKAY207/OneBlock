@@ -27,10 +27,12 @@ class BlockBreakListener implements Listener{
 
     public function onSpawnerBlockBreak(SpawnerBlockBreakEvent $event) : void{
         if($event->isCancelled()) return;
+
         $oneBlock = $event->getOneBlock();
         $blockPosition = $event->getBlock()->getPosition();
-        // Randomizer needs to be added
-        $oneBlock->getWorld()->setBlockAt($blockPosition->getX(), $blockPosition->getY(), $blockPosition->getZ(), VanillaBlocks::TNT());
+        $newBlock = $oneBlock->getNewBlock();
+
+        $oneBlock->getWorld()->setBlockAt($blockPosition->getX(), $blockPosition->getY(), $blockPosition->getZ(), $newBlock);
         $oneBlock->addToBrokenSpawnerBlocks(1);
     }
 }

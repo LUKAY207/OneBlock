@@ -13,6 +13,14 @@ class OneBlockFactory{
     use SingletonTrait;
 
     private array $loadedOneBlock = [];
+    public const int STAGE_ONE = 1;
+    public const array STAGE_ONE_BLOCKS =
+        [
+        ];
+    public const int STAGE_TWO = 2;
+    public const array STAGE_TWO_BLOCKS =
+        [
+        ];
 
     public function getData() : Config{
         return new Config(Loader::getInstance()->getDataFolder() . "data.json", Config::JSON);
@@ -46,6 +54,10 @@ class OneBlockFactory{
         unset($this->loadedOneBlock[$player->getName()]);
     }
 
+    public function updateData(OneBlock $oneBlock) : void{
+        $this->loadedOneBlock[$oneBlock->getOwner()->getName()] = $oneBlock;
+    }
+
     public function create(OneBlock $oneBlock) : void{
         $this->loadedOneBlock[$oneBlock->getOwner()->getName()] = $oneBlock;
     }
@@ -55,5 +67,12 @@ class OneBlockFactory{
             return null;
         }
         return $this->loadedOneBlock[$owner->getName()];
+    }
+
+    public function hasOneBlock(Player $player) : bool{
+        if(isset($this->loadedOneBlock[$player->getName()])){
+            return true;
+        }
+        return false;
     }
 }
