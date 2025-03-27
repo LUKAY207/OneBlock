@@ -16,8 +16,22 @@ class OneBlockFactory{
     use SingletonTrait;
 
     private array $loadedOneBlock = [];
-    public const int STAGE_ONE = 1;
-    public const int STAGE_TWO = 2;
+    public const int PHASE_ONE = 1;
+    public const int PHASE_TWO = 2;
+    public const int PHASE_THREE = 3;
+    public const int PHASE_FOUR = 4;
+    public const int PHASE_FIVE = 5;
+    public const int PHASE_SIX = 6;
+    public const int PHASE_SEVEN = 7;
+    public const int PHASE_EIGHT = 8;
+    public const int PHASE_NINE = 9;
+    public const int PHASE_TEN = 10;
+    public const int PHASE_ELEVEN = 11;
+    public const int PHASE_TWELVE = 12;
+    public const int PHASE_THIRTEEN = 13;
+    public const int PHASE_FOURTEEN = 14;
+    public const int PHASE_FIFTEEN = 15;
+    public const int PHASE_SIXTEEN = 16;
 
     public function getData() : Config{
         return new Config(Loader::getInstance()->getDataFolder() . "data.json", Config::JSON);

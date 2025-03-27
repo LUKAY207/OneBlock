@@ -34,5 +34,11 @@ class BlockBreakListener implements Listener{
 
         $oneBlock->getWorld()->setBlockAt($blockPosition->getX(), $blockPosition->getY(), $blockPosition->getZ(), $newBlock);
         $oneBlock->addToBrokenSpawnerBlocks(1);
+
+        if($oneBlock->getBrokenSpawnerBlocksCounter() === 1000){
+            $oneBlock->setPhase(OneBlockFactory::PHASE_TWO);
+        }elseif($oneBlock->getBrokenSpawnerBlocksCounter() === 2000){
+            $oneBlock->setPhase(OneBlockFactory::PHASE_TWO);
+        }
     }
 }

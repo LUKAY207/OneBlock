@@ -9,6 +9,7 @@ use pocketmine\block\Block;
 use pocketmine\block\BlockIdentifier;
 use pocketmine\block\BlockTypeIds;
 use pocketmine\block\BlockTypeInfo;
+use pocketmine\block\utils\DirtType;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\data\bedrock\item\BlockItemIdMap;
 use pocketmine\item\StringToItemParser;
@@ -24,7 +25,7 @@ class OneBlock{
     private string $name;
     private World $world;
     private int $brokenSpawnerBlockCounter = 0;
-    private int $stage = OneBlockFactory::STAGE_ONE;
+    private int $phase = OneBlockFactory::PHASE_ONE;
 
     public function __construct(Player $owner, string $name){
         $this->owner = $owner;
@@ -79,33 +80,28 @@ class OneBlock{
         $this->brokenSpawnerBlockCounter = $this->brokenSpawnerBlockCounter + $amount;
     }
 
-    public function getStage() : int{
-        return $this->stage;
+    public function getPhase() : int{
+        return $this->phase;
     }
 
-    public function setStage(int $newStage) : void{
-        $this->stage = $newStage;
+    public function setPhase(int $newPhase) : void{
+        $this->phase = $newPhase;
     }
 
     public function getStageBlocks() : ?array{
-        $stageOneBlocks = [VanillaBlocks::GRASS(), VanillaBlocks::STONE(), VanillaBlocks::OAK_LOG()];
-        $stageTwoBlocks = [];
-        if($this->stage === OneBlockFactory::STAGE_ONE){
+        $stageOneBlocks = [VanillaBlocks::STONE(), VanillaBlocks::DIRT(), VanillaBlocks::COAL_ORE(), VanillaBlocks::IRON_ORE(), VanillaBlocks::GOLD_ORE(), VanillaBlocks::REDSTONE_ORE(), VanillaBlocks::LAPIS_LAZULI_ORE(), VanillaBlocks::OAK_LOG(), VanillaBlocks::CHEST()];
+        $stageTwoBlocks = [VanillaBlocks::SNOW(), VanillaBlocks::ICE(), VanillaBlocks::PACKED_ICE(), VanillaBlocks::COBBLESTONE(), VanillaBlocks::SPRUCE_LOG(), VanillaBlocks::PODZOL(), VanillaBlocks::DIRT()->setDirtType(DirtType::COARSE), VanillaBlocks::SPRUCE_LEAVES(), VanillaBlocks::MOSSY_COBBLESTONE(), VanillaBlocks::CHEST()];
+
+        if($this->getPhase() === OneBlockFactory::PHASE_ONE){
             return $stageOneBlocks;
-        }elseif($this->stage === OneBlockFactory::STAGE_TWO){
+        }elseif($this->getPhase() === OneBlockFactory::PHASE_TWO){
             return array_merge($stageOneBlocks, $stageTwoBlocks);
         }
         return null;
     }
 
     public function getNewBlock() : Block{
-        $possibleBlocks = $this->getStageBlocks() ?? null;
-        $randomBlock = $possibleBlocks[array_rand($possibleBlocks)];
-
-        if($randomBlock instanceof Block){
-            return $randomBlock;
-        }
-
-        return VanillaBlocks::GRASS();
+        $possibleBlocks = $this->getStageBlocks();
+        return $possibleBlocks[array_rand($possibleBlocks)] ?? VanillaBlocks::GRASS();
     }
 }
