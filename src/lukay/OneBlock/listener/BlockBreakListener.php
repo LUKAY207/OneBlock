@@ -7,9 +7,12 @@ namespace lukay\OneBlock\listener;
 use lukay\OneBlock\event\SpawnerBlockBreakEvent;
 use lukay\OneBlock\OneBlockFactory;
 use lukay\OneBlock\session\Session;
-use pocketmine\block\VanillaBlocks;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\Listener;
+use pocketmine\network\mcpe\protocol\types\BlockPosition;
+use pocketmine\network\mcpe\protocol\UpdateBlockPacket;
+use pocketmine\Server;
+use pocketmine\world\Position;
 
 class BlockBreakListener implements Listener{
 
@@ -20,7 +23,7 @@ class BlockBreakListener implements Listener{
         if($session->isInOneBlockWorld()){
             $oneBlock = OneBlockFactory::getInstance()->get($player);
             if($oneBlock->isSpawnerBlock($event->getBlock())){
-                (new SpawnerBlockBreakEvent($player, $event->getBlock(), $event->getItem(), $oneBlock))->call();
+                (new SpawnerBlockBreakEvent($oneBlock))->call();
             }
         }
     }
@@ -29,10 +32,9 @@ class BlockBreakListener implements Listener{
         if($event->isCancelled()) return;
 
         $oneBlock = $event->getOneBlock();
-        $blockPosition = $event->getBlock()->getPosition();
         $newBlock = $oneBlock->getNewBlock();
 
-        $oneBlock->getWorld()->setBlockAt($blockPosition->getX(), $blockPosition->getY(), $blockPosition->getZ(), $newBlock);
+        $oneBlock->getWorld()->setBlockAt(0, 64, 0, $newBlock);
         $oneBlock->addToBrokenSpawnerBlocks(1);
 
         if($oneBlock->getBrokenSpawnerBlocksCounter() === 1000){

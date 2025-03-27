@@ -9,15 +9,15 @@ use pocketmine\block\Block;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\Cancellable;
 use pocketmine\event\CancellableTrait;
+use pocketmine\event\Event;
 use pocketmine\item\Item;
 use pocketmine\player\Player;
 
-class SpawnerBlockBreakEvent extends BlockBreakEvent implements Cancellable {
+class SpawnerBlockBreakEvent extends Event implements Cancellable {
     use CancellableTrait;
 
-    public function __construct(Player $player, Block $block, Item $item,
+    public function __construct(
     private readonly OneBlock $oneBlock){
-        parent::__construct($player, $block, $item);
         $this->eventName = "SpawnerBlockBreakEvent";
     }
 
