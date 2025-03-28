@@ -1,49 +1,65 @@
-OneBlock Plugin (Version 0.0.3)
-This plugin is still in development but now functional.
-Many core features have been implemented, and the plugin can be used, but it is not yet recommended for production servers. A code rewrite is planned to improve accuracy, maintainability, and efficiency.
+Here’s your updated `README.md` with improved formatting and style for better readability:
 
-Features Implemented:
-OneBlock Core Mechanics: The basic logic for the OneBlock world is in place.
+---
 
-Randomizer: Blocks now generate randomly when breaking the OneBlock.
+# 🌍 OneBlock Plugin (Version 0.0.3)
 
-Basic Commands:
+🚀 **A PocketMine-MP plugin that brings the OneBlock experience to your server!**  
+⚠️ **This plugin is still in development and not yet recommended for production use.**
 
-/oneblock create – Create a new OneBlock world.
+---
 
-/oneblock home – Teleport to your OneBlock.
+## ✨ Features Implemented:
+✅ **OneBlock Core Mechanics** – The foundation of the OneBlock world is in place.  
+🎲 **Randomizer** – Blocks now generate randomly when breaking the OneBlock.  
+⚡ **Basic Commands**:
+- `/oneblock create` – Create a new OneBlock world.
+- `/oneblock home` – Teleport to your OneBlock.  
+  🛠 **Crash Fixes** – Stability improvements and bug fixes.
 
-Crash Fixes: Stability improvements have been made.
+---
 
-Features Still in Development:
-Phases System: Different block phases for progression are not yet complete.
+## 🚧 Features Still in Development:
+🔄 **Phases System** – Progressive block phases are not fully implemented yet.  
+🛠 **Code Refactoring** – Planned improvements for better structure and maintainability.  
+📌 **Additional Features** – More enhancements and optimizations are on the way.
 
-Code Refactoring: A major rewrite is planned for better structure and maintainability.
+---
 
-Additional Features: More improvements and optimizations will be added in future versions.
+## 📥 Installation:
+1️⃣ **Download** the plugin file.  
+2️⃣ **Place** it in the `plugins` directory of your PocketMine server.  
+3️⃣ **Restart** the server to enable the plugin.
 
-Installation:
-Download the plugin file.
+---
 
-Place it in the plugins directory of your PocketMine server.
+## 🎮 Usage:
+This plugin is now functional, but key features like phase progression are still in progress.  
+✅ **You can create and teleport to OneBlock worlds**  
+⚠️ **Still not fully optimized for production servers!**
 
-Restart the server to enable the plugin.
+---
 
-Usage:
-While the plugin is now functional, key features like phase progression are still in progress. It is usable, but not yet fully optimized or recommended for production.
+## 🔨 Development Status:
+- **Version**: `0.0.3`
+- **Status**: Usable but under development.
+- **Upcoming**: Completion of the phase system and a full code rewrite for improved accuracy.
 
-Development Status:
-Version: 0.0.3
+---
 
-Status: Usable but still in development.
+## 🤝 Contribution:
+💡 Have ideas or want to help? Contributions are welcome!  
+📌 Submit a pull request or provide feedback.
 
-Upcoming: Phase system completion and code refactoring.
+---
 
-Contribution:
-Contributions are welcome! If you’d like to help, feel free to submit pull requests or provide feedback.
+## 📜 License:
+📝 This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
 
-License:
-This project is licensed under the MIT License - see the LICENSE file for details.
+---
 
-Disclaimer:
-This plugin is still evolving. Expect updates, fixes, and improvements as development continues. Thank you for your patience and support!
+**⚠ Disclaimer:**  
+This plugin is still evolving. Expect frequent updates, fixes, and improvements.  
+🙏 Thank you for your patience and support!
+
+---
