@@ -1,11 +1,14 @@
 {
+  "name": "lukay/oneblock",
+  "description": "A OneBlock plugin for PocketMine-MP",
+  "license": "MIT",
   "require-dev": {
-    "phpstan/phpstan": "2.1.10"
+    "phpstan/phpstan": "^2.1"
   },
   "require": {
-    "pocketmine/pocketmine-mp": "5.25.0",
-    "muqsit/invmenu": "4.6.5",
-    "dktapps/pmforms": "2.2.0"
+    "pocketmine/pocketmine-mp": "^5.25",
+    "muqsit/invmenu": "^4.6",
+    "dktapps/pmforms": "^2.2"
   },
   "autoload": {
     "classmap": ["src"]
