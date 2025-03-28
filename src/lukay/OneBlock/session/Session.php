@@ -24,7 +24,8 @@ final class Session {
     public function isInOneBlockWorld() : bool{
         $oneBlockFactory = OneBlockFactory::getInstance();
 
-        if(self::$player->getWorld() === $oneBlockFactory->get(self::$player)->getWorld()){
+        if(!$oneBlockFactory->hasOneBlock(self::$player)) return false;
+        if(self::$player->getWorld() === $oneBlockFactory->get(self::$player)->getWorld() ?? null){
             return true;
         }else{
             return false;

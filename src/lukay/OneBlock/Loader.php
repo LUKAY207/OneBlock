@@ -9,6 +9,7 @@ use lukay\OneBlock\command\OneBlockCommand;
 use lukay\OneBlock\generator\OneBlock as OneBlockGenerator;
 use lukay\OneBlock\listener\BlockBreakListener;
 use lukay\OneBlock\listener\PlayerJoinListener;
+use lukay\OneBlock\listener\PlayerQuitListener;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use pocketmine\utils\SingletonTrait;
@@ -30,17 +31,27 @@ class Loader extends PluginBase{
         $generatorManager = GeneratorManager::getInstance();
         $generatorManager->addGenerator(OneBlockGenerator::class, "oneblock", fn() => null);
 
-        $this->getServer()->getPluginManager()->registerEvents(new PlayerJoinListener(), $this);
-        $this->getServer()->getPluginManager()->registerEvents(new BlockBreakListener(), $this);
+        $listener =
+            [
+                new BlockBreakListener(),
+                new PlayerJoinListener(),
+                new PlayerQuitListener()
+            ];
 
         $this->getServer()->getCommandMap()->register("OneBlock", new OneBlockCommand());
+
+        foreach($listener as $listener_){
+            $this->getServer()->getPluginManager()->registerEvents($listener_,  $this);
+        }
     }
 
     /**
      * @throws JsonException
      */
     protected function onDisable() : void{
-        OneBlockFactory::getInstance()->saveData();
+        foreach($this->getServer()->getOnlinePlayers() as $player) {
+            OneBlockFactory::getInstance()->saveData($player);
+        }
     }
 
     public function usesMySQL() : bool{

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace lukay\OneBlock\command;
 
 use lukay\OneBlock\command\subcommand\CreateSubcommand;
+use lukay\OneBlock\command\subcommand\HomeSubcommand;
 use lukay\OneBlock\command\subcommand\Subcommand;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
@@ -18,7 +19,8 @@ class OneBlockCommand extends Command{
 
         $this->setPermission("oneblock.command");
 
-        $this->registerSubcommand(new CreateSubcommand("create"));
+        $this->registerSubcommand(new CreateSubcommand("create", "", ["c"]));
+        $this->registerSubcommand(new HomeSubcommand("home", "", ["h"]));
     }
 
     public function execute(CommandSender $sender, string $commandLabel, array $args) : void{

@@ -14,22 +14,18 @@ use pocketmine\world\Position;
 class CreateSubcommand extends Subcommand{
 
     public function execute(CommandSender $sender, array $args) : void{
-        if(!$sender instanceof Player){
-            return;
-        }
-
-        if(!$this->testPermission($sender)){
-            return;
-        }
+        if(!$sender instanceof Player) return;
+        if(!$this->testPermission($sender)) return;
 
         $oneBlockFactory = OneBlockFactory::getInstance();
+
         if($oneBlockFactory->hasOneBlock($sender)){
             $sender->sendMessage("§cYou already own a OneBlock world. You are not allowed to create more than one");
             return;
         }
 
         if(count($args) === 0){
-            $sender->sendMessage("§cYou need to give a name for the OneBlock: §7/oneblock create name");
+            $sender->sendMessage("§cYou need to give a name for the OneBlock§7: /oneblock create name");
             return;
         }
 
@@ -38,12 +34,11 @@ class CreateSubcommand extends Subcommand{
             return;
         }
 
-        $oneBlockFactory->create(new OneBlock($sender, $args[0]));
+        $oneBlockFactory->create(new OneBlock($sender->getName(), $args[0]));
         $oneBlock = $oneBlockFactory->get($sender);
 
-        if(!$oneBlock->getWorld()->isLoaded()){
-            Server::getInstance()->getWorldManager()->loadWorld($oneBlock->getWorld()->getFolderName());
-        }
+        if(!$oneBlock->getWorld()->isLoaded()) Server::getInstance()->getWorldManager()->loadWorld($oneBlock->getWorld()->getFolderName());
+        if(!$oneBlock->getWorld()->isChunkLoaded(0, 0)) $oneBlock->getWorld()->loadChunk(0, 0);
 
         $sender->teleport(new Position(0,65, 0, $oneBlock->getWorld()));
     }

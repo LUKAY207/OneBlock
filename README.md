@@ -1,38 +1,49 @@
-# OneBlock Plugin (Version 0.0.1)
+OneBlock Plugin (Version 0.0.3)
+This plugin is still in development but now functional.
+Many core features have been implemented, and the plugin can be used, but it is not yet recommended for production servers. A code rewrite is planned to improve accuracy, maintainability, and efficiency.
 
-**This plugin is still in development and is not yet ready for use.**  
-The core logic is implemented, but there are several features still missing. Please note that the plugin is currently a work in progress and will be released soon.
+Features Implemented:
+OneBlock Core Mechanics: The basic logic for the OneBlock world is in place.
 
-## Features Implemented:
-- Major logic for the OneBlock world has been added.
-- The basic structure for handling the OneBlock world is in place.
+Randomizer: Blocks now generate randomly when breaking the OneBlock.
 
-## Features Yet to be Implemented:
-- **Creating OneBlocks through commands**: Currently, there is no way to create OneBlocks through commands. This feature will be added in a future release.
-- **Randomizer**: The random block generation feature is still missing.
-- **Stages**: Stages for the OneBlock world are not yet implemented. This will be a key feature in future updates.
+Basic Commands:
 
-## Installation:
-1. Download the plugin file.
-2. Place it in the `plugins` directory of your PocketMine server.
-3. Restart the server to enable the plugin.
+/oneblock create – Create a new OneBlock world.
 
-## Usage:
-Since the plugin is still in development, there is no functionality available for players yet. Features such as creating OneBlocks or managing stages will be added soon.
+/oneblock home – Teleport to your OneBlock.
 
-## Development Status:
-- **Version**: 0.0.1
-- **Status**: In development, not ready for public use yet.
-- **Upcoming**: Command creation, randomizer functionality, and stage progression.
+Crash Fixes: Stability improvements have been made.
 
-## Contribution:
-If you're interested in contributing, feel free to submit pull requests. Suggestions and feedback are always welcome!
+Features Still in Development:
+Phases System: Different block phases for progression are not yet complete.
 
-## License:
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Code Refactoring: A major rewrite is planned for better structure and maintainability.
 
----
+Additional Features: More improvements and optimizations will be added in future versions.
 
-**Disclaimer**:  
-This plugin is under active development, and changes will be made frequently. Please be patient as we finalize the features.
- - 
+Installation:
+Download the plugin file.
+
+Place it in the plugins directory of your PocketMine server.
+
+Restart the server to enable the plugin.
+
+Usage:
+While the plugin is now functional, key features like phase progression are still in progress. It is usable, but not yet fully optimized or recommended for production.
+
+Development Status:
+Version: 0.0.3
+
+Status: Usable but still in development.
+
+Upcoming: Phase system completion and code refactoring.
+
+Contribution:
+Contributions are welcome! If you’d like to help, feel free to submit pull requests or provide feedback.
+
+License:
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+Disclaimer:
+This plugin is still evolving. Expect updates, fixes, and improvements as development continues. Thank you for your patience and support!

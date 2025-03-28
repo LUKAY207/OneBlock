@@ -7,3 +7,5 @@ permissions:
     default: true
   create.subcommand:
     default: true
+  home.subcommand:
+    default: true

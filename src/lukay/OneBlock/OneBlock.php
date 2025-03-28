@@ -4,31 +4,30 @@ declare(strict_types=1);
 
 namespace lukay\OneBlock;
 
+use JsonSerializable;
 use lukay\OneBlock\generator\OneBlock as OneBlockGenerator;
 use pocketmine\block\Block;
-use pocketmine\block\BlockIdentifier;
-use pocketmine\block\BlockTypeIds;
-use pocketmine\block\BlockTypeInfo;
 use pocketmine\block\utils\DirtType;
 use pocketmine\block\VanillaBlocks;
-use pocketmine\data\bedrock\item\BlockItemIdMap;
-use pocketmine\item\StringToItemParser;
 use pocketmine\math\Vector3;
 use pocketmine\player\Player;
 use pocketmine\Server;
 use pocketmine\world\World;
 use pocketmine\world\WorldCreationOptions;
 
-class OneBlock{
+class OneBlock implements JsonSerializable{
 
-    private ?Player $owner;
+    private readonly OneBlockFactory $oneBlockFactory;
+
+    private string $owner;
     private string $name;
     private World $world;
-    private int $brokenSpawnerBlockCounter = 0;
-    private int $phase = OneBlockFactory::PHASE_ONE;
+    private int $brokenSpawnerBlockCounter;
+    private int $phase;
 
-    public function __construct(Player $owner, string $name){
-        $this->owner = $owner;
+    public function __construct(string $ownerName, string $name, int $brokenSpawnerBlockCounter = 0,  int $phase = 1){
+        $this->oneBlockFactory = OneBlockFactory::getInstance();
+        $this->owner = $ownerName;
         $this->name = $name;
 
         $server = Server::getInstance();
@@ -42,14 +41,18 @@ class OneBlock{
         }
 
         $this->world = $server->getWorldManager()->getWorldByName($name);
+        $this->brokenSpawnerBlockCounter = $brokenSpawnerBlockCounter;
+        $this->phase = $phase;
     }
 
-    public function getOwner() : Player{
-        return $this->owner;
+    public function getOwner() : ?Player{
+        if(Server::getInstance()->getPlayerExact($this->owner) === null) return null;
+        return Server::getInstance()->getPlayerExact($this->owner);
     }
 
     public function setOwner(Player $newOwner) : void{
-        $this->owner = $newOwner;
+        $this->owner = $newOwner->getName();
+        $this->oneBlockFactory->updateData($this);
     }
 
     public function getName() : string{
@@ -58,6 +61,7 @@ class OneBlock{
 
     public function setName(string $newName) : void{
         $this->name = $newName;
+        $this->oneBlockFactory->updateData($this);
     }
 
     public function getWorld() : World{
@@ -66,6 +70,7 @@ class OneBlock{
 
     public function setWorld(World $newWorld) : void{
         $this->world = $newWorld;
+        $this->oneBlockFactory->updateData($this);
     }
 
     public function isSpawnerBlock(Block $block) : bool{
@@ -82,6 +87,7 @@ class OneBlock{
 
     public function addToBrokenSpawnerBlocks(int $amount) : void{
         $this->brokenSpawnerBlockCounter = $this->brokenSpawnerBlockCounter + $amount;
+        $this->oneBlockFactory->updateData($this);
     }
 
     public function getPhase() : int{
@@ -90,6 +96,7 @@ class OneBlock{
 
     public function setPhase(int $newPhase) : void{
         $this->phase = $newPhase;
+        $this->oneBlockFactory->updateData($this);
     }
 
     public function getStageBlocks() : ?array{
@@ -107,5 +114,16 @@ class OneBlock{
     public function getNewBlock() : Block{
         $possibleBlocks = $this->getStageBlocks();
         return $possibleBlocks[array_rand($possibleBlocks)] ?? VanillaBlocks::GRASS();
+    }
+
+    public function jsonSerialize() : array{
+        return
+            [
+                "name" => $this->name,
+                "owner" => $this->owner,
+                "world" => $this->world->getFolderName(),
+                "brokenSpawnerBlockCounter" => $this->brokenSpawnerBlockCounter,
+                "phase" => $this->phase
+            ];
     }
 }
