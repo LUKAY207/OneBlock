@@ -14,22 +14,6 @@ class OneBlockFactory{
     use SingletonTrait;
 
     public array $loadedOneBlock = [];
-    public const PHASE_ONE = 1;
-    public const PHASE_TWO = 2;
-    public const PHASE_THREE = 3;
-    public const PHASE_FOUR = 4;
-    public const PHASE_FIVE = 5;
-    public const PHASE_SIX = 6;
-    public const PHASE_SEVEN = 7;
-    public const PHASE_EIGHT = 8;
-    public const PHASE_NINE = 9;
-    public const PHASE_TEN = 10;
-    public const PHASE_ELEVEN = 11;
-    public const PHASE_TWELVE = 12;
-    public const PHASE_THIRTEEN = 13;
-    public const PHASE_FOURTEEN = 14;
-    public const PHASE_FIFTEEN = 15;
-    public const PHASE_SIXTEEN = 16;
 
     public function getData() : Config{
         return new Config(Loader::getInstance()->getDataFolder() . "data.json", Config::JSON);
@@ -90,6 +74,7 @@ class OneBlockFactory{
     }
 
     public function fromJson(array $data) : OneBlock{
-        return new OneBlock($data["owner"], $data["name"], $data["brokenSpawnerBlockCounter"], $data["phase"]);
+        $phase = OneBlockPhase::from($data["phase"]);
+        return new OneBlock($data["owner"], $data["name"], $data["brokenSpawnerBlockCounter"], $phase);
     }
 }

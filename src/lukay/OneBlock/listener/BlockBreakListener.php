@@ -6,16 +6,12 @@ namespace lukay\OneBlock\listener;
 
 use lukay\OneBlock\event\SpawnerBlockBreakEvent;
 use lukay\OneBlock\OneBlockFactory;
+use lukay\OneBlock\OneBlockPhase;
 use lukay\OneBlock\session\Session;
-use pocketmine\block\VanillaBlocks;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\Listener;
 use pocketmine\math\Vector3;
-use pocketmine\network\mcpe\protocol\types\BlockPosition;
-use pocketmine\network\mcpe\protocol\UpdateBlockPacket;
-use pocketmine\Server;
 use pocketmine\world\particle\BlockBreakParticle;
-use pocketmine\world\Position;
 
 class BlockBreakListener implements Listener{
 
@@ -55,9 +51,9 @@ class BlockBreakListener implements Listener{
 
 
         if($oneBlock->getBrokenSpawnerBlocksCounter() === 1000){
-            $oneBlock->setPhase(OneBlockFactory::PHASE_TWO);
+            $oneBlock->setPhase(OneBlockPhase::PHASE_TWO);
         }elseif($oneBlock->getBrokenSpawnerBlocksCounter() === 2000){
-            $oneBlock->setPhase(OneBlockFactory::PHASE_TWO);
+            $oneBlock->setPhase(OneBlockPhase::PHASE_THREE);
             //FURTHER PHASES...
         }
     }

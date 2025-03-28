@@ -23,9 +23,9 @@ class OneBlock implements JsonSerializable{
     private string $name;
     private World $world;
     private int $brokenSpawnerBlockCounter;
-    private int $phase;
+    private OneBlockPhase $phase;
 
-    public function __construct(string $ownerName, string $name, int $brokenSpawnerBlockCounter = 0,  int $phase = 1){
+    public function __construct(string $ownerName, string $name, int $brokenSpawnerBlockCounter = 0, OneBlockPhase $phase = OneBlockPhase::PHASE_ONE){
         $this->oneBlockFactory = OneBlockFactory::getInstance();
         $this->owner = $ownerName;
         $this->name = $name;
@@ -90,11 +90,11 @@ class OneBlock implements JsonSerializable{
         $this->oneBlockFactory->updateData($this);
     }
 
-    public function getPhase() : int{
+    public function getPhase() : OneBlockPhase{
         return $this->phase;
     }
 
-    public function setPhase(int $newPhase) : void{
+    public function setPhase(OneBlockPhase $newPhase) : void{
         $this->phase = $newPhase;
         $this->oneBlockFactory->updateData($this);
     }
@@ -103,9 +103,9 @@ class OneBlock implements JsonSerializable{
         $stageOneBlocks = [VanillaBlocks::STONE(), VanillaBlocks::DIRT(), VanillaBlocks::COAL_ORE(), VanillaBlocks::IRON_ORE(), VanillaBlocks::GOLD_ORE(), VanillaBlocks::REDSTONE_ORE(), VanillaBlocks::LAPIS_LAZULI_ORE(), VanillaBlocks::OAK_LOG(), VanillaBlocks::CHEST()];
         $stageTwoBlocks = [VanillaBlocks::SNOW(), VanillaBlocks::ICE(), VanillaBlocks::PACKED_ICE(), VanillaBlocks::COBBLESTONE(), VanillaBlocks::SPRUCE_LOG(), VanillaBlocks::PODZOL(), VanillaBlocks::DIRT()->setDirtType(DirtType::COARSE), VanillaBlocks::SPRUCE_LEAVES(), VanillaBlocks::MOSSY_COBBLESTONE(), VanillaBlocks::CHEST()];
 
-        if($this->getPhase() === OneBlockFactory::PHASE_ONE){
+        if($this->getPhase() == OneBlockPhase::PHASE_ONE){
             return $stageOneBlocks;
-        }elseif($this->getPhase() === OneBlockFactory::PHASE_TWO){
+        }elseif($this->getPhase() == OneBlockPhase::PHASE_TWO){
             return array_merge($stageOneBlocks, $stageTwoBlocks);
         }
         return null;
