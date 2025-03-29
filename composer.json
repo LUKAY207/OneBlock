@@ -3,10 +3,10 @@
   "description": "A OneBlock plugin for PocketMine-MP",
   "license": "MIT",
   "require-dev": {
+    "pocketmine/pocketmine-mp": "^5.25",
     "phpstan/phpstan": "^2.1"
   },
   "require": {
-    "pocketmine/pocketmine-mp": "^5.25",
     "muqsit/invmenu": "^4.6",
     "dktapps/pmforms": "^2.2"
   },
