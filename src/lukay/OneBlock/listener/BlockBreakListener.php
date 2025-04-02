@@ -18,43 +18,46 @@ class BlockBreakListener implements Listener{
     public function onBreak(BlockBreakEvent $event) : void{
         $player = $event->getPlayer();
         $session = Session::get($player);
+
+        if (!$session->isInOneBlockWorld()) return;
+
+        $oneBlock = OneBlockFactory::getInstance()->get($player);
         $block = $event->getBlock();
 
-        if($session->isInOneBlockWorld()){
-            $oneBlock = OneBlockFactory::getInstance()->get($player);
-            if($oneBlock->isSpawnerBlock($block)){
+        if (!$oneBlock->isSpawnerBlock($block)) return;
 
-                $vector3 = new Vector3(0, 65, 0);
-                $world = $block->getPosition()->getWorld();
+        $world = $block->getPosition()->getWorld();
+        $vector3 = OneBlockFactory::$DROPS_VECTOR;
+        $world->addParticle($vector3, new BlockBreakParticle($block));
+        $xpAmount = $event->getXpDropAmount();
 
-                $world->addParticle($vector3, new BlockBreakParticle($block));
-                $world->dropExperience($vector3, $event->getXpDropAmount());
+        if($xpAmount > 0) $world->dropExperience($vector3, $xpAmount);
 
-                foreach($event->getDrops() as $item) {
-                    $world->dropItem($vector3, $item);
-                }
-
-                $event->cancel();
-                (new SpawnerBlockBreakEvent($oneBlock))->call();
-            }
+        foreach ($event->getDrops() as $item) {
+            $world->dropItem($vector3, $item);
         }
+
+        $event->cancel();
+        (new SpawnerBlockBreakEvent($oneBlock))->call();
     }
 
     public function onSpawnerBlockBreak(SpawnerBlockBreakEvent $event) : void{
         if($event->isCancelled()) return;
 
         $oneBlock = $event->getOneBlock();
-        $newBlock = $oneBlock->getNewBlock();
 
-        $oneBlock->getWorld()->setBlockAt(0, 64, 0, $newBlock);
+        $oneBlock->getWorld()->setBlockAt(0, 64, 0, $oneBlock->getNewBlock());
         $oneBlock->addToBrokenSpawnerBlocks(1);
 
 
-        if($oneBlock->getBrokenSpawnerBlocksCounter() === 1000){
-            $oneBlock->setPhase(OneBlockPhase::PHASE_TWO);
-        }elseif($oneBlock->getBrokenSpawnerBlocksCounter() === 2000){
-            $oneBlock->setPhase(OneBlockPhase::PHASE_THREE);
-            //FURTHER PHASES...
+        static $phases = [
+            1000 => OneBlockPhase::PHASE_TWO,
+            2000 => OneBlockPhase::PHASE_THREE,
+            // Add further phases here...
+        ];
+
+        if(isset($phases[$oneBlock->getBrokenSpawnerBlocksCounter()])){
+            $oneBlock->setPhase($phases[$oneBlock->getBrokenSpawnerBlocksCounter()]);
         }
     }
 }

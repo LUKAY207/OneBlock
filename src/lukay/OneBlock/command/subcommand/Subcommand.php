@@ -18,28 +18,25 @@ abstract class Subcommand{
         $this->permission = $this->name . ".subcommand";
     }
 
-    public function getName(): string {
+    public function getName() : string {
         return $this->name;
     }
 
-    public function getUsageMessage(): string {
+    public function getUsageMessage() : string {
         return $this->usage;
     }
 
-    public function getAliases(): array {
+    public function getAliases() : array {
         return $this->aliases;
     }
 
-    public function getPermission(): string {
+    public function getPermission() : string {
         return $this->permission;
     }
 
-    public function testPermission(CommandSender $sender): bool {
-        if ($sender->hasPermission($this->permission)) {
-            return true;
-        }
-        return false;
+    public function testPermission(CommandSender $sender) : bool {
+       return $sender->hasPermission($this->permission);
     }
 
-    abstract public function execute(CommandSender $sender, array $args): void;
+    abstract public function execute(CommandSender $sender, array $args) : void;
 }

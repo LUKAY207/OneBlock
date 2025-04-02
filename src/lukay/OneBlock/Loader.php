@@ -10,6 +10,9 @@ use lukay\OneBlock\generator\OneBlock as OneBlockGenerator;
 use lukay\OneBlock\listener\BlockBreakListener;
 use lukay\OneBlock\listener\PlayerJoinListener;
 use lukay\OneBlock\listener\PlayerQuitListener;
+use pocketmine\block\utils\DirtType;
+use pocketmine\block\VanillaBlocks;
+use pocketmine\item\StringToItemParser;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use pocketmine\utils\SingletonTrait;
@@ -43,6 +46,8 @@ class Loader extends PluginBase{
         foreach($listener as $listener_){
             $this->getServer()->getPluginManager()->registerEvents($listener_,  $this);
         }
+
+        OneBlockFactory::getInstance()->initPositions();
     }
 
     /**

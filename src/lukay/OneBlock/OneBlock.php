@@ -7,8 +7,8 @@ namespace lukay\OneBlock;
 use JsonSerializable;
 use lukay\OneBlock\generator\OneBlock as OneBlockGenerator;
 use pocketmine\block\Block;
-use pocketmine\block\utils\DirtType;
 use pocketmine\block\VanillaBlocks;
+use pocketmine\item\StringToItemParser;
 use pocketmine\math\Vector3;
 use pocketmine\player\Player;
 use pocketmine\Server;
@@ -29,24 +29,28 @@ class OneBlock implements JsonSerializable{
         $this->oneBlockFactory = OneBlockFactory::getInstance();
         $this->owner = $ownerName;
         $this->name = $name;
-
-        $server = Server::getInstance();
-
-        if($server->getWorldManager()->getWorldByName($name) === null) {
-            $server->getWorldManager()->generateWorld($name,
-                WorldCreationOptions::create()
-                    ->setSpawnPosition(new Vector3(0, 65, 0))
-                    ->setSeed(mt_rand())
-                    ->setGeneratorClass(OneBlockGenerator::class));
-        }
-
-        $this->world = $server->getWorldManager()->getWorldByName($name);
+        $this->world = $this->initWorld($name);
         $this->brokenSpawnerBlockCounter = $brokenSpawnerBlockCounter;
         $this->phase = $phase;
     }
 
+    private function initWorld(string $name) : World{
+        $server = Server::getInstance();
+        $worldManager = $server->getWorldManager();
+        $world = $worldManager->getWorldByName($name);
+
+        if($world === null) {
+            $worldManager->generateWorld($name,
+                WorldCreationOptions::create()
+                    ->setSpawnPosition(new Vector3(0, 65, 0))
+                    ->setSeed(mt_rand())
+                    ->setGeneratorClass(OneBlockGenerator::class));
+            $world = $worldManager->getWorldByName($name);
+        }
+        return $world;
+    }
+
     public function getOwner() : ?Player{
-        if(Server::getInstance()->getPlayerExact($this->owner) === null) return null;
         return Server::getInstance()->getPlayerExact($this->owner);
     }
 
@@ -74,11 +78,7 @@ class OneBlock implements JsonSerializable{
     }
 
     public function isSpawnerBlock(Block $block) : bool{
-        if($block->getPosition()->equals(new Vector3(0, 64, 0))){
-            return true;
-        }else{
-            return false;
-        }
+        return $block->getPosition()->equals(OneBlockFactory::$BLOCK_SPAWNER_VECTOR);
     }
 
     public function getBrokenSpawnerBlocksCounter() : int{
@@ -86,7 +86,7 @@ class OneBlock implements JsonSerializable{
     }
 
     public function addToBrokenSpawnerBlocks(int $amount) : void{
-        $this->brokenSpawnerBlockCounter = $this->brokenSpawnerBlockCounter + $amount;
+        $this->brokenSpawnerBlockCounter += $amount;
         $this->oneBlockFactory->updateData($this);
     }
 
@@ -99,21 +99,29 @@ class OneBlock implements JsonSerializable{
         $this->oneBlockFactory->updateData($this);
     }
 
-    public function getStageBlocks() : ?array{
-        $stageOneBlocks = [VanillaBlocks::STONE(), VanillaBlocks::DIRT(), VanillaBlocks::COAL_ORE(), VanillaBlocks::IRON_ORE(), VanillaBlocks::GOLD_ORE(), VanillaBlocks::REDSTONE_ORE(), VanillaBlocks::LAPIS_LAZULI_ORE(), VanillaBlocks::OAK_LOG(), VanillaBlocks::CHEST()];
-        $stageTwoBlocks = [VanillaBlocks::SNOW(), VanillaBlocks::ICE(), VanillaBlocks::PACKED_ICE(), VanillaBlocks::COBBLESTONE(), VanillaBlocks::SPRUCE_LOG(), VanillaBlocks::PODZOL(), VanillaBlocks::DIRT()->setDirtType(DirtType::COARSE), VanillaBlocks::SPRUCE_LEAVES(), VanillaBlocks::MOSSY_COBBLESTONE(), VanillaBlocks::CHEST()];
+    public function getStageBlocks() : array{
+        static $stages =
+            [
+                OneBlockPhase::PHASE_ONE->value => ["minecraft:stone", "minecraft:dirt", "minecraft:coal_ore", "minecraft:iron_ore", "minecraft:gold_ore", "minecraft:redstone_ore", "minecraft:lapis_ore", "minecraft:oak_log", "minecraft:chest"],
+                OneBlockPhase::PHASE_TWO->value => ["minecraft:snow", "minecraft_ice", "minecraft:packed_ice", "minecraft:cobblestone", "minecraft:spruce_log", "minecraft:podzol", "minecraft:coarse_dirt", "minecraft:spruce_leaves", "minecraft:mossy_cobblestone"]
+            ];
 
-        if($this->getPhase() == OneBlockPhase::PHASE_ONE){
-            return $stageOneBlocks;
-        }elseif($this->getPhase() == OneBlockPhase::PHASE_TWO){
-            return array_merge($stageOneBlocks, $stageTwoBlocks);
+        $phase = $this->getPhase()->value;
+
+        $blocks = [];
+        foreach (range(OneBlockPhase::PHASE_ONE->value, $phase) as $currentPhase) {
+            if (isset($stages[$currentPhase])) {
+                $blocks = array_merge($blocks, $stages[$currentPhase]);
+            }
         }
-        return null;
+        return $blocks;
     }
 
     public function getNewBlock() : Block{
         $possibleBlocks = $this->getStageBlocks();
-        return $possibleBlocks[array_rand($possibleBlocks)] ?? VanillaBlocks::GRASS();
+        $blockString = $possibleBlocks[array_rand($possibleBlocks)];
+
+        return StringToItemParser::getInstance()->parse($blockString)?->getBlock() ?? VanillaBlocks::GRASS();
     }
 
     public function jsonSerialize() : array{
