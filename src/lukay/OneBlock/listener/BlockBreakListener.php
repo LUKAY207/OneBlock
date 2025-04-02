@@ -10,7 +10,6 @@ use lukay\OneBlock\OneBlockPhase;
 use lukay\OneBlock\session\Session;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\Listener;
-use pocketmine\math\Vector3;
 use pocketmine\world\particle\BlockBreakParticle;
 
 class BlockBreakListener implements Listener{
