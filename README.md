@@ -61,4 +61,8 @@
 
 ---
 
-This keeps everything structured, clear, and up to date. Let me know if you want any changes! 🚀
+**⚠ Disclaimer:**  
+This plugin is still evolving. Expect frequent updates, fixes, and improvements.  
+🙏 Thank you for your patience and support!
+
+---
