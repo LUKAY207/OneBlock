@@ -1,4 +1,4 @@
-
+---
 🌍 OneBlock Plugin (Version 0.0.6)
 🚀 A PocketMine-MP plugin that brings the OneBlock experience to your server!
 ⚠️ This plugin is still in development and not yet recommended for production use.
