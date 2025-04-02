@@ -4,16 +4,26 @@ declare(strict_types=1);
 
 namespace lukay\OneBlock;
 
+use InvalidArgumentException;
 use JsonException;
+use pocketmine\math\Vector3;
 use pocketmine\player\Player;
 use pocketmine\Server;
 use pocketmine\utils\Config;
 use pocketmine\utils\SingletonTrait;
+use RuntimeException;
 
 class OneBlockFactory{
     use SingletonTrait;
 
     public array $loadedOneBlock = [];
+    public static Vector3 $BLOCK_SPAWNER_VECTOR;
+    public static Vector3 $DROPS_VECTOR;
+
+    public function initPositions() : void{
+        self::$BLOCK_SPAWNER_VECTOR = new Vector3(0, 64, 0);
+        self::$DROPS_VECTOR = new Vector3(0, 65, 0);
+    }
 
     public function getData() : Config{
         return new Config(Loader::getInstance()->getDataFolder() . "data.json", Config::JSON);
@@ -23,7 +33,7 @@ class OneBlockFactory{
      * @throws JsonException
      */
     public function saveData(Player $player) : void{
-        $oneBlock = $this->loadedOneBlock[$player->getName()];
+        $oneBlock = $this->loadedOneBlock[$player->getName()] ?? null;
 
         if(!$oneBlock instanceof OneBlock) return;
 
@@ -34,11 +44,15 @@ class OneBlockFactory{
 
     public function loadData(Player $player) : void{
         $data = $this->getData();
-
         $encodedOneBlock = $data->get($player->getName());
         $decodedOneBlock = json_decode($encodedOneBlock, true);
 
-        if(Server::getInstance()->getWorldManager()->getWorldByName($decodedOneBlock["name"]) === null) Server::getInstance()->getWorldManager()->loadWorld($decodedOneBlock["name"]);
+        if($decodedOneBlock === null) throw new RuntimeException("Failed to decode OneBlock data for player" . $player->getName() . ".");
+
+        $worldName = $decodedOneBlock["name"];
+        $worldManager = Server::getInstance()->getWorldManager();
+
+        if($worldManager->getWorldByName($worldName) === null) $worldManager->loadWorld($worldName);
 
         $this->loadedOneBlock[$player->getName()] = $this->fromJson($decodedOneBlock);
     }
@@ -67,14 +81,12 @@ class OneBlockFactory{
     }
 
     public function hasOneBlock(Player $player) : bool{
-        if($this->getData()->exists($player->getName()) || isset($this->loadedOneBlock[$player->getName()])){
-            return true;
-        }
-        return false;
+        return isset($this->loadedOneBlock[$player->getName()]) || $this->getData()->exists($player->getName());
     }
 
     public function fromJson(array $data) : OneBlock{
-        $phase = OneBlockPhase::from($data["phase"]);
-        return new OneBlock($data["owner"], $data["name"], $data["brokenSpawnerBlockCounter"], $phase);
+        if(!isset($data["phase"]) || !OneBlockPhase::tryFrom($data["phase"])) throw new InvalidArgumentException("Invalid phase data");
+
+        return new OneBlock($data["owner"], $data["name"], $data["brokenSpawnerBlockCounter"], OneBlockPhase::from($data["phase"]));
     }
 }

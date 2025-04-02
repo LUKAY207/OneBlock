@@ -43,6 +43,8 @@ class Loader extends PluginBase{
         foreach($listener as $listener_){
             $this->getServer()->getPluginManager()->registerEvents($listener_,  $this);
         }
+
+        OneBlockFactory::getInstance()->initPositions();
     }
 
     /**

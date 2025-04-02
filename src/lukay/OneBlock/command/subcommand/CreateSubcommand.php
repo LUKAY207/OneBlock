@@ -29,13 +29,15 @@ class CreateSubcommand extends Subcommand{
             return;
         }
 
+        $worldName = $args[0];
+
         if(Server::getInstance()->getWorldManager()->getWorldByName($args[0]) !== null){
             $sender->sendMessage("§cYou cannot use that name.");
             return;
         }
 
-        $oneBlockFactory->create(new OneBlock($sender->getName(), $args[0]));
-        $oneBlock = $oneBlockFactory->get($sender);
+        $oneBlock = new OneBlock($sender->getName(), $args[0]);
+        $oneBlockFactory->create($oneBlock);
 
         if(!$oneBlock->getWorld()->isLoaded()) Server::getInstance()->getWorldManager()->loadWorld($oneBlock->getWorld()->getFolderName());
         if(!$oneBlock->getWorld()->isChunkLoaded(0, 0)) $oneBlock->getWorld()->loadChunk(0, 0);
