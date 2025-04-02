@@ -44,8 +44,9 @@ class BlockBreakListener implements Listener{
         if($event->isCancelled()) return;
 
         $oneBlock = $event->getOneBlock();
+        $newBlock = $oneBlock->getNewBlock();
 
-        $oneBlock->getWorld()->setBlockAt(0, 64, 0, $oneBlock->getNewBlock());
+        $oneBlock->getWorld()->setBlockAt(0, 64, 0, $newBlock);
         $oneBlock->addToBrokenSpawnerBlocks(1);
 
         static $phases = [

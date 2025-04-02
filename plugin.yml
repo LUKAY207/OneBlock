@@ -1,6 +1,6 @@
 name: OneBlock
 api: 5.25.0
-version: 0.0.5
+version: 0.0.6
 main: lukay\OneBlock\Loader
 permissions:
   oneblock.command:
