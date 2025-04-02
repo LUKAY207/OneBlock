@@ -1,5 +1,3 @@
-Here’s your updated `README.md` with improved formatting and style for better readability:
-
 ---
 
 # 🌍 OneBlock Plugin (Version 0.0.3)
