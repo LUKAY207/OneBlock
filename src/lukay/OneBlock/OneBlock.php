@@ -23,14 +23,16 @@ class OneBlock implements JsonSerializable{
     private string $name;
     private World $world;
     private int $brokenSpawnerBlockCounter;
+    private array $allowedPlayers = [];
     private OneBlockPhase $phase;
 
-    public function __construct(string $ownerName, string $name, int $brokenSpawnerBlockCounter = 0, OneBlockPhase $phase = OneBlockPhase::PLAINS){
+    public function __construct(string $ownerName, string $name, int $brokenSpawnerBlockCounter = 0, array $allowedPlayers = [], OneBlockPhase $phase = OneBlockPhase::PLAINS){
         $this->oneBlockFactory = OneBlockFactory::getInstance();
         $this->owner = $ownerName;
         $this->name = $name;
         $this->world = $this->initWorld($name);
         $this->brokenSpawnerBlockCounter = $brokenSpawnerBlockCounter;
+        $this->allowedPlayers = $allowedPlayers;
         $this->phase = $phase;
     }
 
@@ -88,6 +90,18 @@ class OneBlock implements JsonSerializable{
     public function addToBrokenSpawnerBlocks(int $amount) : void{
         $this->brokenSpawnerBlockCounter += $amount;
         $this->oneBlockFactory->updateData($this);
+    }
+
+    public function getAllowedPlayers() : array{
+        return $this->allowedPlayers;
+    }
+
+    public function isAllowedPlayer(Player $player) : bool{
+        return in_array($player->getName(), $this->allowedPlayers);
+    }
+
+    public function addAllowedPlayer(Player  $player) : void{
+        $this->allowedPlayers[] = $player->getName();
     }
 
     public function getPhase() : OneBlockPhase{

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace lukay\OneBlock\listener;
 
+use lukay\OneBlock\event\PhaseChangeEvent;
 use lukay\OneBlock\event\SpawnerBlockBreakEvent;
 use lukay\OneBlock\OneBlockFactory;
 use lukay\OneBlock\OneBlockPhase;
@@ -83,7 +84,7 @@ class BlockBreakListener implements Listener{
         ];
 
         if(isset($phases[$oneBlock->getBrokenSpawnerBlocksCounter()])){
-            $oneBlock->setPhase($phases[$oneBlock->getBrokenSpawnerBlocksCounter()]);
+            (new PhaseChangeEvent($oneBlock, $phases[$oneBlock->getBrokenSpawnerBlocksCounter()]))->call();
         }
     }
 }
